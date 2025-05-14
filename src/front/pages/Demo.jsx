@@ -6,6 +6,7 @@ export const Demo = () => {
   // Access the global state and dispatch function using the useGlobalReducer hook.
   const { store, dispatch } = useGlobalReducer()
 
+  
   return (
     <div className="container">
       <ul className="list-group">

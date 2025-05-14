@@ -1,52 +1,47 @@
-import React, { useEffect } from "react"
-import rigoImageUrl from "../assets/img/rigo-baby.jpg";
-import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
+import { useNavigate } from "react-router-dom";
+
 
 export const Home = () => {
 
-	const { store, dispatch } = useGlobalReducer()
+	// const { store, dispatch } = useGlobalReducer()
+	const navigate = useNavigate()
+	
+	// const handleClick = () => {
+	// 	userServices.getInfo().then(data => dispatch({type:'get_info', payload: data}))
+	// }
 
-	const loadMessage = async () => {
-		try {
-			const backendUrl = import.meta.env.VITE_BACKEND_URL
-
-			if (!backendUrl) throw new Error("VITE_BACKEND_URL is not defined in .env file")
-
-			const response = await fetch(backendUrl + "/api/hello")
-			const data = await response.json()
-
-			if (response.ok) dispatch({ type: "set_hello", payload: data.message })
-
-			return data
-
-		} catch (error) {
-			if (error.message) throw new Error(
-				`Could not fetch the message from the backend.
-				Please check if the backend is running and the backend port is public.`
-			);
-		}
-
+	const handleSignup = () => {
+		navigate('/signup')
 	}
-
-	useEffect(() => {
-		loadMessage()
-	}, [])
+	const handleSignin = () => {
+		navigate('/signin')
+	}
+	const handleInfo = () => {
+		navigate ('/private')
+		localStorage.getItem('token')? navigate('/private'): navigate('/signin')
+	}
 
 	return (
 		<div className="text-center mt-5">
-			<h1 className="display-4">Hello Rigo!!</h1>
-			<p className="lead">
-				<img src={rigoImageUrl} className="img-fluid rounded-circle mb-3" alt="Rigo Baby" />
-			</p>
-			<div className="alert alert-info">
-				{store.message ? (
-					<span>{store.message}</span>
-				) : (
-					<span className="text-danger">
-						Loading message from the backend (make sure your python 🐍 backend is running)...
-					</span>
-				)}
-			</div>
+			{/* <h2>Registro Usuario</h2>
+			<Register />
+
+			<h2>Login Usuario</h2>
+			<Login />
+			
+			<h3>Renderizar Login</h3>
+			<button onClick={handleClick} className="btn btn-primary">Info Login</button>
+
+			{localStorage.getItem('token') && <Private/>} */}
+			<h2>Registro Usuario</h2>
+			<button className="btn btn-primary" onClick={handleSignup}>SignUp</button>
+
+			<h2>SignIn Usuario</h2>
+			<button className="btn btn-primary" onClick={handleSignin}>SignIn</button>
+
+			<h3>Renderizar SignIn</h3>
+			<button onClick={handleInfo} className="btn btn-primary">Info SignIn</button>
+
 		</div>
 	);
 }; 
