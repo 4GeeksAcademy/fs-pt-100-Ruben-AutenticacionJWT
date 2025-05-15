@@ -72,10 +72,10 @@ def login():
     try:
         data = request.get_json()
 
-        if not data.get("email") or not data.get("password"):
+        if not data.get("password") or not (data.get("identify") ):
             return jsonify({"error": "missing data"})
 
-        stmt = select(User).where(User.email == data["email"] )
+        stmt = select(User).where(or_(User.email == data["identify"], User.username == data["identify"]))
         user = db.session.execute(stmt).scalar_one_or_none()
 
 
@@ -83,7 +83,7 @@ def login():
             raise Exception({"error": "Email/Username not found"})
         
         if not check_password_hash(user.password, data["password"]):
-            return({"success": False, "error": "wrong email/password"})
+            return jsonify({"success": False, "error": "wrong email/password"})
 
 
         token = create_access_token(identity=str(user.id))
